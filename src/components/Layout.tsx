@@ -65,7 +65,7 @@ function DrawerContent() {
   const listItems = [
     { text: "Clients", href: "clients" },
     { text: "Campaigns", href: "campaigns" },
-    { text: "Associates", href: "associates" },
+    { text: "Affiliates", href: "affiliates" },
     { text: "Personal Stats", href: "stats" }
   ];
 
