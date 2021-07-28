@@ -8,7 +8,7 @@ import {
 
 import AppBar from "@material-ui/core/AppBar";
 
-import IconButton from "@material-ui/icons/IconButton";
+import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -62,28 +62,6 @@ function Panel() {
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);
   };
-  //Drawer
-  const [selectedIndex, setSelectedIndex] = React.useState(undefined);
-  const handleListItemClick = (index: number) => {
-    setSelectedIndex(index);
-  };
-
-  const listItems = ["Clients", "Campaigns", "Assosiates", "Personal Stats"];
-
-  const drawer = (
-    <div>
-      <div className={classes.toolbar}>
-        <List>
-          {listItems.map((text, index) => (
-            <ListItem button key={text + index}>
-              {" "}
-              <ListItemText primary={text} />{" "}
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    </div>
-  );
 
   return (
     <div className={classes.root}>
@@ -107,10 +85,27 @@ function Panel() {
 
 export default Panel;
 
-function SideBar() {
+function ResonsiveDrawer({ isOpen }) {
+  const classes = useStyles();
+
+  const [selectedIndex, setSelectedIndex] = React.useState(undefined);
+  const handleListItemClick = (index: number) => {
+    setSelectedIndex(index);
+  };
+
+  const listItems = ["Clients", "Campaigns", "Assosiates", "Personal Stats"];
+
   return (
     <div>
-      <ul></ul>
+      <div className={classes.toolbar}>
+        <List>
+          {listItems.map((text, index) => (
+            <ListItem button key={text + index}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
     </div>
   );
 }
