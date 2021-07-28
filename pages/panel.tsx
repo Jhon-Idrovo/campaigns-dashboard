@@ -57,13 +57,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function ResponsiveDrawer() {
+function DrawerContent({ activeIndex, handleSectionChange }) {
   const classes = useStyles();
-
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const handleListItemClick = (index: number) => {
-    setSelectedIndex(index);
-  };
 
   const listItems = ["Clients", "Campaigns", "Assosiates", "Personal Stats"];
 
@@ -75,8 +70,8 @@ function ResponsiveDrawer() {
             <ListItem
               button
               key={text + index}
-              selected={selectedIndex === index}
-              onClick={() => handleListItemClick(index)}
+              selected={activeIndex === index}
+              onClick={() => handleSectionChange(index)}
             >
               <ListItemText primary={text} />
             </ListItem>
@@ -91,10 +86,14 @@ function Panel() {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  //const [activeSection, setActiveSection] = React.useState(0)
-
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);
+  };
+
+  //section
+  const [activeSection, setActiveSection] = React.useState(0);
+  const handleSectionChange = (index: number) => {
+    setActiveSection(index);
   };
 
   return (
@@ -131,7 +130,10 @@ function Panel() {
               keepMounted: true // Better open performance on mobile.
             }}
           >
-            <ResponsiveDrawer />
+            <DrawerContent
+              activeIndex={activeSection}
+              handleSectionChange={handleSectionChange}
+            />
           </Drawer>
         </Hidden>
         {/* Always open variant */}
@@ -143,11 +145,17 @@ function Panel() {
             variant="permanent"
             open
           >
-            <ResponsiveDrawer />
+            <DrawerContent
+              activeIndex={activeSection}
+              handleSectionChange={handleSectionChange}
+            />
           </Drawer>
         </Hidden>
       </nav>
-      <main>content here</main>
+      <main>
+        <div className={classes.toolbar} />
+        <Typography color="primary">{activeSection}</Typography>
+      </main>
     </div>
   );
 }
