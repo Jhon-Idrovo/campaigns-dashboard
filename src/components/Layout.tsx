@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core/styles";
 
 import AppBar from "@material-ui/core/AppBar";
-
+import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -20,7 +20,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { useRouter } from "next/router";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,7 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-      width: drawerWidth
+      width: drawerWidth,
+      backgroundColor: "secondary"
     },
     content: {
       flexGrow: 1,
@@ -70,25 +71,25 @@ function DrawerContent() {
 
   return (
     <div>
-      <div className={classes.toolbar}>
-        <List component="nav" aria-label={listItems.join(" ")}>
-          {listItems.map(({ text, href }, index) => (
-            <ListItem
-              button
-              key={text + index}
-              selected={router.pathname.includes(href)}
-              onClick={() => router.push(href)}
-            >
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <div className={classes.toolbar} />
+      <Divider />
+      <List component="nav" aria-label={listItems.join(" ")}>
+        {listItems.map(({ text, href }, index) => (
+          <ListItem
+            button
+            key={text + index}
+            selected={router.pathname.includes(href)}
+            onClick={() => router.push(href)}
+          >
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
     </div>
   );
 }
 
-function Panel({ children }) {
+function Layout({ children }) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -148,11 +149,10 @@ function Panel({ children }) {
       </nav>
       <main>
         <div className={classes.toolbar} />
-        <Typography color="primary">jlkjlj</Typography>
         {children}
       </main>
     </div>
   );
 }
 
-export default Panel;
+export default Layout;

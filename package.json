@@ -6,11 +6,13 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "4.11.2",
     "@types/material-ui": "0.21.9",
+    "@types/react-query": "1.2.9",
     "axios": "0.21.1",
     "clsx": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-query": "3.19.1"
   },
   "scripts": {
     "dev": "next",
