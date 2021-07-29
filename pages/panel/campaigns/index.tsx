@@ -2,7 +2,7 @@ import Layout from "../../../src/components/Layout";
 import {
   DataGrid,
   GridColDef,
-  GridValueGetterParams
+  GridValueGetterParams,
 } from "@material-ui/data-grid";
 
 import useCampaigns from "../../../src/hooks/useCampaigns";
@@ -12,72 +12,98 @@ function Index() {
     {
       field: "id",
       headerName: "ID",
-      width: 40
+      width: 90,
     },
     {
       field: "pages",
-      type: "number",
       headerName: "Pages",
-      width: 40,
-      editable: true
+      type: "number",
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
     },
     {
       field: "impressions",
       type: "number",
       headerName: "Impressions",
-      width: 40,
-      editable: true
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 170,
+      editable: true,
     },
     {
       field: "leads",
       type: "number",
       headerName: "Leads",
-      width: 40,
-      editable: true
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
     },
     {
       field: "affiliates",
       headerName: "Affiliates",
-      width: 40,
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 150,
       editable: true,
-      sorteable: false
+      sortable: false,
     },
     {
       field: "price",
       type: "number",
       headerName: "Price",
-      width: 40,
-      editable: true
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
     },
     {
       field: "spend",
       type: "number",
       headerName: "Spend",
-      width: 40,
-      editable: true
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
     },
     {
       field: "profit",
       type: "number",
       headerName: "Profit",
-      width: 40,
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
       valueGetter: (params: GridValueGetterParams) =>
-        params.getValue(params.id, "Price") -
-        params.getValue(params.id, "spend")
+        params.getValue(params.id, "price") -
+        params.getValue(params.id, "spend"),
     },
     {
       field: "profitMargin",
       headerName: "Profit %",
-      width: 40,
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 150,
       valueGetter: (params: GridValueGetterParams) =>
-        (params.getValue(params.id, "profit") /
-          params.getValue(params.id, "price")) *
-        100
-    }
+        Math.round(
+          (params.getValue(params.id, "profit") /
+            params.getValue(params.id, "price")) *
+            100
+        ),
+    },
   ];
   return (
     <Layout>
-      <div>
+      <div className="data-grid-container">
         <DataGrid
           rows={rows}
           columns={columns}

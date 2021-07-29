@@ -2,82 +2,54 @@ import Layout from "../../../src/components/Layout";
 import {
   DataGrid,
   GridColDef,
-  GridValueGetterParams
+  GridValueGetterParams,
 } from "@material-ui/data-grid";
 
-import useCampaigns from "../../../src/hooks/useCampaigns";
+import useClients from "../../../src/hooks/useClients";
+
 function Index() {
-  const rows = useCampaigns();
+  const rows = useClients();
   const columns: GridColDef[] = [
     {
       field: "id",
       headerName: "ID",
-      width: 40
+      width: 90,
     },
     {
-      field: "pages",
-      type: "number",
-      headerName: "Pages",
-      width: 40,
-      editable: true
-    },
-    {
-      field: "impressions",
-      type: "number",
-      headerName: "Impressions",
-      width: 40,
-      editable: true
-    },
-    {
-      field: "leads",
-      type: "number",
-      headerName: "Leads",
-      width: 40,
-      editable: true
-    },
-    {
-      field: "affiliates",
-      headerName: "Affiliates",
-      width: 40,
+      field: "name",
+      type: "string",
+      headerName: "Name",
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
       editable: true,
-      sorteable: false
     },
     {
-      field: "price",
-      type: "number",
-      headerName: "Price",
-      width: 40,
-      editable: true
+      field: "type",
+      type: "string",
+      headerName: "Type",
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
     },
     {
-      field: "spend",
-      type: "number",
-      headerName: "Spend",
-      width: 40,
-      editable: true
+      field: "comments",
+      type: "string",
+      headerName: "Comments",
+      resizable: true,
+      headerAlign: "left",
+      align: "right",
+      width: 130,
+      editable: true,
+      sortable: false,
     },
-    {
-      field: "profit",
-      type: "number",
-      headerName: "Profit",
-      width: 40,
-      valueGetter: (params: GridValueGetterParams) =>
-        params.getValue(params.id, "Price") -
-        params.getValue(params.id, "spend")
-    },
-    {
-      field: "profitMargin",
-      headerName: "Profit %",
-      width: 40,
-      valueGetter: (params: GridValueGetterParams) =>
-        (params.getValue(params.id, "profit") /
-          params.getValue(params.id, "price")) *
-        100
-    }
   ];
   return (
     <Layout>
-      <div>
+      <div className="data-grid-container">
         <DataGrid
           rows={rows}
           columns={columns}

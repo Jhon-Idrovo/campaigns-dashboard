@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/data-grid": "^4.0.0-alpha.34",
     "@material-ui/icons": "4.11.2",
     "@types/material-ui": "0.21.9",
     "@types/react-query": "1.2.9",
@@ -15,7 +16,7 @@
     "react-query": "3.19.1"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
