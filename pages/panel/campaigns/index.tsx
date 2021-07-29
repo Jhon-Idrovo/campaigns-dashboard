@@ -83,7 +83,7 @@ function Index() {
       align: "right",
       width: 130,
       valueGetter: (params: GridValueGetterParams) =>
-        params.getValue(params.id, "price") -
+        (params.getValue(params.id, "price") || 0) -
         params.getValue(params.id, "spend"),
     },
     {
@@ -95,8 +95,8 @@ function Index() {
       width: 150,
       valueGetter: (params: GridValueGetterParams) =>
         Math.round(
-          (params.getValue(params.id, "profit") /
-            params.getValue(params.id, "price")) *
+          ((params.getValue(params.id, "profit") || 0) /
+            (params.getValue(params.id, "price") || 0)) *
             100
         ),
     },

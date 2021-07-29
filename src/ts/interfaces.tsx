@@ -22,3 +22,8 @@ export declare interface AffiliateInterface {
   reach: Number;
   comments: string;
 }
+
+export declare interface TablePropsInterface {
+  headers: string[];
+  rows: AffiliateInterface[] | CampaignInterface[] | ClientInterface[];
+}
