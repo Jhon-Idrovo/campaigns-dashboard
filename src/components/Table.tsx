@@ -44,7 +44,7 @@ function EnhancedTableHead({
 }: {
   headers: string[];
   order: Order;
-  orderBy: string;
+  orderBy: number;
   handleRequestSort: Function;
   classes: ReturnType<typeof useStyles>;
 }) {
@@ -56,19 +56,19 @@ function EnhancedTableHead({
         <VisibilityIcon/>
       </Button>
         </TableCell> */}
-        {headers.map((h) => (
+        {headers.map((h, index) => (
           <TableCell
             key={h}
             align="right"
-            sortDirection={orderBy === h ? order : false}
+            sortDirection={orderBy === index ? order : false}
           >
             <TableSortLabel
-              active={orderBy === h}
-              direction={orderBy === h ? order : "asc"}
-              onClick={() => handleRequestSort(h)}
+              active={orderBy === index}
+              direction={orderBy === index ? order : "asc"}
+              onClick={() => handleRequestSort(index)}
             >
               {h}
-              {orderBy === h ? (
+              {orderBy === index ? (
                 <span className={classes.visuallyHidden}>
                   {order === "asc" ? "sorting ascending" : "sorting descending"}
                 </span>
@@ -112,17 +112,17 @@ type Order = "asc" | "desc";
 function EnhancedTable({ headers, rows }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof typeof rows[0]>("id");
+  const [orderBy, setOrderBy] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
-  function mergeSort<T>(rows: T[], sortBy: keyof T) {
+  function getSortedRows() {
     return rows;
   }
   /**
    * sort the rows when requested
    */
-  const handleRequestSort = (col: keyof typeof rows[0]) => {
+  const handleRequestSort = (col: number) => {
     //determine the sorting order. If we don't have the table already sorted
     //with the same column, we need to start sortin ascendently
     const isAsc = orderBy === col && order === "asc";
@@ -148,8 +148,7 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
               classes={classes}
             />
             <TableBody>
-              {mergeSort<typeof rows[0]>(rows, orderBy).map()}
-              {rows.map((row) => (
+              {getSortedRows().map((row) => (
                 <TableRow
                   key={row.id}
                   //role="button"
