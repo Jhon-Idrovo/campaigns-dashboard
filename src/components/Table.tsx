@@ -10,7 +10,12 @@ import {
   TableRow,
   TableBody,
 } from "@material-ui/core";
-import { TablePropsInterface } from "../ts/interfaces";
+import {
+  AffiliateInterface,
+  CampaignInterface,
+  ClientInterface,
+  TablePropsInterface,
+} from "../ts/interfaces";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
 import {
@@ -19,6 +24,16 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core/styles";
+
+function descendingComparator<T>(rowA: T, rowB: T, orderBy: keyof T) {
+  if (rowA[orderBy] > rowB[orderBy]) {
+    return -1;
+  }
+  if (rowA[orderBy] < rowB[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
 
 function EnhancedTableHead({
   headers,
@@ -97,14 +112,17 @@ type Order = "asc" | "desc";
 function EnhancedTable({ headers, rows }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState("id");
+  const [orderBy, setOrderBy] = useState<keyof typeof rows[0]>("id");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
+  function mergeSort<T>(rows: T[], sortBy: keyof T) {
+    return rows;
+  }
   /**
    * sort the rows when requested
    */
-  const handleRequestSort = (col: string) => {
+  const handleRequestSort = (col: keyof typeof rows[0]) => {
     //determine the sorting order. If we don't have the table already sorted
     //with the same column, we need to start sortin ascendently
     const isAsc = orderBy === col && order === "asc";
@@ -130,6 +148,7 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
               classes={classes}
             />
             <TableBody>
+              {mergeSort<typeof rows[0]>(rows, orderBy).map()}
               {rows.map((row) => (
                 <TableRow
                   key={row.id}
