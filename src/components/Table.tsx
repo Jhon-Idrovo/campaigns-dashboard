@@ -5,8 +5,11 @@ import {
   TableContainer,
   TableHead,
   TableSortLabel,
+  Paper,
+  Table,
+  TableRow,
+  TableBody,
 } from "@material-ui/core";
-import { Paper, Table, TableRow } from "material-ui";
 import { TablePropsInterface } from "../ts/interfaces";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
@@ -22,23 +25,40 @@ function EnhancedTableHead({
   order,
   orderBy,
   handleRequestSort,
+  classes,
 }: {
   headers: string[];
   order: Order;
   orderBy: string;
   handleRequestSort: Function;
+  classes: ReturnType<typeof useStyles>;
 }) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>
-          {/* <Button>
+        {/* <TableCell>
+          <Button>
         <VisibilityIcon/>
-      </Button> */}
-        </TableCell>
+      </Button>
+        </TableCell> */}
         {headers.map((h) => (
-          <TableCell key={h} align="left">
-            <TableSortLabel>{h}</TableSortLabel>
+          <TableCell
+            key={h}
+            align="right"
+            sortDirection={orderBy === h ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === h}
+              direction={orderBy === h ? order : "asc"}
+              onClick={() => handleRequestSort(h)}
+            >
+              {h}
+              {orderBy === h ? (
+                <span className={classes.visuallyHidden}>
+                  {order === "asc" ? "sorting ascending" : "sorting descending"}
+                </span>
+              ) : null}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -107,7 +127,22 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
               order={order}
               orderBy={orderBy}
               handleRequestSort={handleRequestSort}
+              classes={classes}
             />
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  //role="button"
+                >
+                  {Object.values(row).map((val) => (
+                    <TableCell key={val + row.id} align="right">
+                      {val}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
       </Paper>
@@ -115,4 +150,4 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
   );
 }
 
-export default Table;
+export default EnhancedTable;

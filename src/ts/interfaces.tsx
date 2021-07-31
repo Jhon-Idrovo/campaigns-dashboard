@@ -1,25 +1,30 @@
 export declare interface ClientInterface {
-  id: Number;
+  id: number;
   name: string;
   type: string;
   comments: string;
 }
 
 export declare interface CampaignInterface {
-  id: Number;
-  pages: Number;
-  impressions: Number;
-  leads: Number;
+  id: number;
+  pages: number;
+  impressions: number;
+  leads: number;
   affiliates: string[];
-  price: Number;
-  spend: Number;
+  price: number;
+  spend: number;
+}
+
+export declare interface UseCampaignsInterface {
+  rows: CampaignInterface[];
+  headers: string[];
 }
 
 export declare interface AffiliateInterface {
-  id: Number;
+  id: number;
   campaigns: string[];
-  paid: Number;
-  reach: Number;
+  paid: number;
+  reach: number;
   comments: string;
 }
 
