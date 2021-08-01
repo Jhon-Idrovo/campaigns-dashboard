@@ -160,22 +160,18 @@ function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
     }
   }
 }
-function EnhancedTable({ headers, rows }: TablePropsInterface) {
+function EnhancedTable({ headers, rows, Body }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
+
+  //rows are displayed on the same order as the headers indexes
   const [orderBy, setOrderBy] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   function getSortedRows() {
     //stable sort
-    const sortedRows = rowsMergeSort<typeof rows[0]>(
-      rows,
-      0,
-      rows.length - 1,
-      orderBy
-    );
-    return sortedRows;
+    rowsMergeSort<typeof rows[0]>(rows, 0, rows.length - 1, orderBy);
   }
   /**
    * sort the rows when requested
@@ -205,20 +201,7 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
               handleRequestSort={handleRequestSort}
               classes={classes}
             />
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  //role="button"
-                >
-                  {Object.values(row).map((val) => (
-                    <TableCell key={val + row.id} align="right">
-                      {val}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
+            <Body rows={rows} />
           </Table>
         </TableContainer>
       </Paper>

@@ -1,3 +1,6 @@
+import { RoomSharp, RowingSharp } from "@material-ui/icons";
+import { ReactNode } from "react";
+
 export declare interface ClientInterface {
   id: number;
   name: string;
@@ -31,4 +34,5 @@ export declare interface AffiliateInterface {
 export declare interface TablePropsInterface {
   headers: string[];
   rows: AffiliateInterface[] | CampaignInterface[] | ClientInterface[];
+  Body: Function;
 }
