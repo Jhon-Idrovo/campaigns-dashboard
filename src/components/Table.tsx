@@ -9,22 +9,14 @@ import {
   Table,
   TableRow,
   TableBody,
+  TablePagination,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core";
-import {
-  AffiliateInterface,
-  CampaignInterface,
-  ClientInterface,
-  HeaderMappingInterface,
-  TablePropsInterface,
-} from "../ts/interfaces";
+import { HeaderMappingInterface, TablePropsInterface } from "../ts/interfaces";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-import {
-  createStyles,
-  lighten,
-  makeStyles,
-  Theme,
-} from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 function EnhancedTableHead({
   headersMap,
@@ -183,9 +175,9 @@ function merge<T>(
 function EnhancedTable({ headersMap, rows, Body }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
-
   //rows are displayed on the same order as the headers indexes
   const [orderBy, setOrderBy] = useState<string>(headersMap[0].header);
+  const [dense, setDense] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
@@ -209,16 +201,17 @@ function EnhancedTable({ headersMap, rows, Body }: TablePropsInterface) {
     setOrderBy(header);
   };
 
-  const handlePageChange = () => {};
-
-  const handleChangeRowsPerPage = () => {};
-
-  const handleSeeMore = () => {};
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table className={classes.table} aria-labelledby="tableTitle">
+          <Table
+            className={classes.table}
+            aria-labelledby="tableTitle"
+            size={dense ? "small" : "medium"}
+          >
             <EnhancedTableHead
               headersMap={headersMap}
               order={order}
@@ -229,7 +222,24 @@ function EnhancedTable({ headersMap, rows, Body }: TablePropsInterface) {
             <Body rows={rows} />
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(event, page) => setPage(page)}
+          onRowsPerPageChange={(event) =>
+            setRowsPerPage(parseInt(event.target.value, 10))
+          }
+        />
       </Paper>
+      <FormControlLabel
+        control={
+          <Switch checked={dense} onChange={() => setDense((prev) => !prev)} />
+        }
+        label="Dense padding"
+      />
     </div>
   );
 }

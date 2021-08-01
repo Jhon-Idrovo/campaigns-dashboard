@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       padding: theme.spacing(3),
     },
+    title: {
+      flexGrow: 1,
+    },
   })
 );
 
@@ -111,7 +114,9 @@ function Layout({ children }: { children: React.ReactNode }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6">Campaigns Dashboard</Typography>
+          <Typography variant="h6" className={classes.title}>
+            Campaigns Dashboard
+          </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
