@@ -1,7 +1,7 @@
 import { CampaignInterface } from "../ts/interfaces";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
 
-function CampaignsTableBody(rows: CampaignInterface[]) {
+function CampaignsTableBody({ rows }: { rows: CampaignInterface[] }) {
   console.log(rows);
 
   return (
