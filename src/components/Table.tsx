@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TableCell,
@@ -139,6 +139,7 @@ function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
   let arrIndex = 1;
   while (lIndex < lengthL && rIndex < lengthR) {
     //compare the rows
+    //orderBy is an index and L[lindex] is an object
     if (L[lIndex][orderBy] <= R[rIndex][orderBy]) {
       arr[arrIndex] = L[lIndex];
       lIndex++;
@@ -169,10 +170,9 @@ function EnhancedTable({ headers, rows, Body }: TablePropsInterface) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
-  function getSortedRows() {
-    //stable sort
+  useEffect(() => {
     rowsMergeSort<typeof rows[0]>(rows, 0, rows.length - 1, orderBy);
-  }
+  }, [orderBy, order]);
   /**
    * sort the rows when requested
    */
