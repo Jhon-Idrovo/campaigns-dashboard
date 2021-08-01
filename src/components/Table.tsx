@@ -25,16 +25,6 @@ import {
   Theme,
 } from "@material-ui/core/styles";
 
-function descendingComparator<T>(rowA: T, rowB: T, orderBy: keyof T) {
-  if (rowA[orderBy] > rowB[orderBy]) {
-    return -1;
-  }
-  if (rowA[orderBy] < rowB[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
 function EnhancedTableHead({
   headers,
   order,
