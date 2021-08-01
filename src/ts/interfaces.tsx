@@ -20,7 +20,7 @@ export declare interface CampaignInterface {
 
 export declare interface UseCampaignsInterface {
   rows: CampaignInterface[];
-  headers: string[];
+  headersMap: { header: string; key: string }[];
 }
 
 export declare interface AffiliateInterface {
@@ -30,9 +30,12 @@ export declare interface AffiliateInterface {
   reach: number;
   comments: string;
 }
-
+export declare interface HeaderMappingInterface {
+  header: string;
+  key: string;
+}
 export declare interface TablePropsInterface {
-  headers: string[];
+  headersMap: HeaderMappingInterface[];
   rows: AffiliateInterface[] | CampaignInterface[] | ClientInterface[];
   Body: Function;
 }

@@ -24,14 +24,13 @@ function useCampaigns() {
         spend: 4000,
       },
     ],
-    headers: [
-      "ID",
-      "Pages",
-      "Impressions",
-      "Leads",
-      "Affiliates",
-      "Price",
-      "Spend",
+    headersMap: [
+      { header: "ID", key: "id" },
+      { header: "Pages", key: "pages" },
+      { header: "Impressions", key: "impressions" },
+      { header: "Leads", key: "Affiliates" },
+      { header: "Price", key: "price" },
+      { header: "Spend", key: "spend" },
     ],
   } as UseCampaignsInterface;
 }

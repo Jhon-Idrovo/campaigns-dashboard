@@ -7,8 +7,6 @@ function CampaignsTableBody({ rows }: { rows: CampaignInterface[] }) {
   return (
     <TableBody>
       {rows.map((row) => {
-        console.log(" kjhkjhjkhkh");
-
         return (
           <TableRow key={row.id}>
             <TableCell align="right">{row.id}</TableCell>

@@ -14,6 +14,7 @@ import {
   AffiliateInterface,
   CampaignInterface,
   ClientInterface,
+  HeaderMappingInterface,
   TablePropsInterface,
 } from "../ts/interfaces";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -26,15 +27,15 @@ import {
 } from "@material-ui/core/styles";
 
 function EnhancedTableHead({
-  headers,
+  headersMap,
   order,
   orderBy,
   handleRequestSort,
   classes,
 }: {
-  headers: string[];
+  headersMap: HeaderMappingInterface[];
   order: Order;
-  orderBy: number;
+  orderBy: string;
   handleRequestSort: Function;
   classes: ReturnType<typeof useStyles>;
 }) {
@@ -46,19 +47,19 @@ function EnhancedTableHead({
         <VisibilityIcon/>
       </Button>
         </TableCell> */}
-        {headers.map((h, index) => (
+        {headersMap.map(({ header: h, key }) => (
           <TableCell
             key={h}
             align="right"
-            sortDirection={orderBy === index ? order : false}
+            sortDirection={orderBy === h ? order : false}
           >
             <TableSortLabel
-              active={orderBy === index}
-              direction={orderBy === index ? order : "asc"}
-              onClick={() => handleRequestSort(index)}
+              active={orderBy === h}
+              direction={orderBy === h ? order : "asc"}
+              onClick={() => handleRequestSort(h)}
             >
               {h}
-              {orderBy === index ? (
+              {orderBy === h ? (
                 <span className={classes.visuallyHidden}>
                   {order === "asc" ? "sorting ascending" : "sorting descending"}
                 </span>
@@ -99,17 +100,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Order = "asc" | "desc";
 
-function rowsMergeSort<T>(rows: T[], l: number, r: number, orderBy: number) {
+function rowsMergeSort<T>(
+  rows: T[],
+  l: number,
+  r: number,
+  orderBy: string,
+  order: Order
+) {
   //T is the type of one row, not the list of them
   if (l >= r) {
     return;
   }
   const m = l + Math.floor((r - l) / 2);
-  rowsMergeSort(rows, l, m, orderBy);
-  rowsMergeSort(rows, m + 1, r, orderBy);
-  merge<T>(rows, l, m, r, orderBy);
+  rowsMergeSort(rows, l, m, orderBy, order);
+  rowsMergeSort(rows, m + 1, r, orderBy, order);
+  merge<T>(rows, l, m, r, orderBy, order);
 }
-function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
+function merge<T>(
+  arr: T[],
+  l: number,
+  m: number,
+  r: number,
+  orderBy: string,
+  order: Order
+) {
   const lengthL = m - l + 1;
   const lengthR = r - m;
 
@@ -126,16 +140,30 @@ function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
   //merging temp arrays back to the orinignal one
   let lIndex, rIndex;
   lIndex = rIndex = 0;
-  let arrIndex = 1;
+  let arrIndex = 0;
   while (lIndex < lengthL && rIndex < lengthR) {
     //compare the rows
-    //orderBy is an index and L[lindex] is an object
-    if (L[lIndex][orderBy] <= R[rIndex][orderBy]) {
-      arr[arrIndex] = L[lIndex];
-      lIndex++;
-    } else {
-      arr[arrIndex] = R[rIndex];
-      rIndex++;
+    //orderBy is a key and L[lindex] is an object
+
+    //descendent order
+    if (order === "desc") {
+      if (L[lIndex][orderBy] <= R[rIndex][orderBy]) {
+        arr[arrIndex] = L[lIndex];
+        lIndex++;
+      } else {
+        arr[arrIndex] = R[rIndex];
+        rIndex++;
+      }
+    }
+    //ascendent order
+    if (order === "asc") {
+      if (L[lIndex][orderBy] >= R[rIndex][orderBy]) {
+        arr[arrIndex] = L[lIndex];
+        lIndex++;
+      } else {
+        arr[arrIndex] = R[rIndex];
+        rIndex++;
+      }
     }
     arrIndex++;
     //copying the remaining elements of R or L, if any
@@ -151,27 +179,34 @@ function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
     }
   }
 }
-function EnhancedTable({ headers, rows, Body }: TablePropsInterface) {
+
+function EnhancedTable({ headersMap, rows, Body }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
 
   //rows are displayed on the same order as the headers indexes
-  const [orderBy, setOrderBy] = useState(0);
+  const [orderBy, setOrderBy] = useState<string>(headersMap[0].header);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   useEffect(() => {
-    rowsMergeSort<typeof rows[0]>(rows, 0, rows.length - 1, orderBy);
+    rowsMergeSort<typeof rows[0]>(
+      rows,
+      0,
+      rows.length - 1,
+      headersMap.filter(({ header, key }) => header === orderBy)[0].key,
+      order
+    );
   }, [orderBy, order]);
   /**
    * sort the rows when requested
    */
-  const handleRequestSort = (col: number) => {
+  const handleRequestSort = (header: string) => {
     //determine the sorting order. If we don't have the table already sorted
     //with the same column, we need to start sortin ascendently
-    const isAsc = orderBy === col && order === "asc";
+    const isAsc = orderBy === header && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(col);
+    setOrderBy(header);
   };
 
   const handlePageChange = () => {};
@@ -185,7 +220,7 @@ function EnhancedTable({ headers, rows, Body }: TablePropsInterface) {
         <TableContainer>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
-              headers={headers}
+              headersMap={headersMap}
               order={order}
               orderBy={orderBy}
               handleRequestSort={handleRequestSort}

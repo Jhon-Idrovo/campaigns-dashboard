@@ -3,11 +3,15 @@ import EnhancedTable from "../../../src/components/Table";
 import useCampaigns from "../../../src/hooks/useCampaigns";
 
 function Test() {
-  const { rows, headers } = useCampaigns();
+  const { rows, headersMap } = useCampaigns();
 
   return (
     <div>
-      <EnhancedTable headers={headers} rows={rows} Body={CampaignsTableBody} />
+      <EnhancedTable
+        headersMap={headersMap}
+        rows={rows}
+        Body={CampaignsTableBody}
+      />
     </div>
   );
 }
