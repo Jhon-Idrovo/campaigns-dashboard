@@ -109,6 +109,57 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Order = "asc" | "desc";
 
+function rowsMergeSort<T>(rows: T[], l: number, r: number, orderBy: number) {
+  //T is the type of one row, not the list of them
+  if (l >= r) {
+    return;
+  }
+  const m = l + Math.floor((r - l) / 2);
+  rowsMergeSort(rows, l, m, orderBy);
+  rowsMergeSort(rows, m + 1, r, orderBy);
+  merge<T>(rows, l, m, r, orderBy);
+}
+function merge<T>(arr: T[], l: number, m: number, r: number, orderBy: number) {
+  const lengthL = m - l + 1;
+  const lengthR = r - m;
+
+  let L = Array(lengthL);
+  let R = Array(lengthR);
+  //temp arrays
+  for (let i = 0; i < lengthL; i++) {
+    L[i] = arr[l + i];
+  }
+  for (let i = 0; i < lengthR; i++) {
+    R[i] = arr[m + 1 + i];
+  }
+
+  //merging temp arrays back to the orinignal one
+  let lIndex, rIndex;
+  lIndex = rIndex = 0;
+  let arrIndex = 1;
+  while (lIndex < lengthL && rIndex < lengthR) {
+    //compare the rows
+    if (L[lIndex][orderBy] <= R[rIndex][orderBy]) {
+      arr[arrIndex] = L[lIndex];
+      lIndex++;
+    } else {
+      arr[arrIndex] = R[rIndex];
+      rIndex++;
+    }
+    arrIndex++;
+    //copying the remaining elements of R or L, if any
+    while (lIndex < lengthL) {
+      arr[arrIndex] = L[lIndex];
+      lIndex++;
+      arrIndex++;
+    }
+    while (rIndex < lengthR) {
+      arr[arrIndex] = R[rIndex];
+      rIndex++;
+      arrIndex++;
+    }
+  }
+}
 function EnhancedTable({ headers, rows }: TablePropsInterface) {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
@@ -117,7 +168,14 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   function getSortedRows() {
-    return rows;
+    //stable sort
+    const sortedRows = rowsMergeSort<typeof rows[0]>(
+      rows,
+      0,
+      rows.length - 1,
+      orderBy
+    );
+    return sortedRows;
   }
   /**
    * sort the rows when requested
@@ -148,7 +206,7 @@ function EnhancedTable({ headers, rows }: TablePropsInterface) {
               classes={classes}
             />
             <TableBody>
-              {getSortedRows().map((row) => (
+              {rows.map((row) => (
                 <TableRow
                   key={row.id}
                   //role="button"

@@ -14,6 +14,15 @@ function useCampaigns() {
         price: 3000,
         spend: 2500,
       },
+      {
+        id: 2,
+        pages: 100,
+        impressions: 50000,
+        leads: 30000,
+        affiliates: ["Af3", "Af4"],
+        price: 6000,
+        spend: 4000,
+      },
     ],
     headers: [
       "ID",
