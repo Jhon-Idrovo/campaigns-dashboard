@@ -26,7 +26,7 @@ function CampaignsTableBody({
         return (
           <TableRow key={row.id}>
             <TableCell align="right" className={classes.tableCell}>
-              <Button onClick={() => router.push(`/${row.id}`)}>
+              <Button onClick={() => router.push(`/testing`)}>
                 <VisibilityIcon />
               </Button>
             </TableCell>
