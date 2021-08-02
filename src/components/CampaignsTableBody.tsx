@@ -1,21 +1,70 @@
 import { CampaignInterface } from "../ts/interfaces";
-import { TableBody, TableCell, TableRow } from "@material-ui/core";
+import {
+  TableBody,
+  TableCell,
+  TableRow,
+  Button,
+  makeStyles,
+  createStyles,
+} from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { useRouter } from "next/router";
 
-function CampaignsTableBody({ rows }: { rows: CampaignInterface[] }) {
-  console.log(rows);
-
+function CampaignsTableBody({
+  rows,
+  hiddenRows,
+  classes,
+}: {
+  rows: CampaignInterface[];
+  hiddenRows: string[];
+  classes: any;
+}) {
+  const router = useRouter();
   return (
     <TableBody>
       {rows.map((row) => {
         return (
           <TableRow key={row.id}>
-            <TableCell align="right">{row.id}</TableCell>
-            <TableCell align="right">{row.pages}</TableCell>
-            <TableCell align="right">{row.impressions}</TableCell>
-            <TableCell align="right">{row.leads}</TableCell>
-            <TableCell align="right">{row.affiliates}</TableCell>
-            <TableCell align="right">{row.price}</TableCell>
-            <TableCell align="right">{row.spend}</TableCell>
+            <TableCell align="right" className={classes.tableCell}>
+              <Button onClick={() => router.push(`/${row.id}`)}>
+                <VisibilityIcon />
+              </Button>
+            </TableCell>
+            {hiddenRows.includes("id") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.id}
+              </TableCell>
+            )}
+            {hiddenRows.includes("pages") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.pages}
+              </TableCell>
+            )}
+            {hiddenRows.includes("impressions") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.impressions}
+              </TableCell>
+            )}
+            {hiddenRows.includes("leads") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.leads}
+              </TableCell>
+            )}
+            {hiddenRows.includes("affiliates") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.affiliates}
+              </TableCell>
+            )}
+            {hiddenRows.includes("price") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.price}
+              </TableCell>
+            )}
+            {hiddenRows.includes("spend") ? null : (
+              <TableCell align="right" className={classes.tableCell}>
+                {row.spend}
+              </TableCell>
+            )}
             {/* <TableCell align="right">{row.price - row.spend}</TableCell> */}
           </TableRow>
         );
